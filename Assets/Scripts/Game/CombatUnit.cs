@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
 public enum UnitSide { Hero, Enemy }            // 어느 편인지
 public enum UnitClass { Warrior, Mage, Archer } // 전사 / 마법사 / 궁수
 public enum UnitRank { Normal, Rare, Epic, Legendary, Mythic, Boss }             // 기본 유닛 / 보스
 
-public class CombatUnit : MonoBehaviour, IDamageable
+public class CombatUnit : MonoBehaviour, IDamageable, IHealthSubject
 {
     [Header("Identity")]
     public UnitSide side = UnitSide.Enemy;
@@ -15,17 +18,17 @@ public class CombatUnit : MonoBehaviour, IDamageable
     public float speed = 5f; // 전사 5, 법사 3, 궁수 7, 신화 +2, 보스 -2  
 
     [Header("Health")]
-    public float currentHP = 100f;
-    public float maxHP = 100f;
+    public float currentHP;
+    public float maxHP;
     /*
     Warrior : 150 / 195 / 255 / 330 / 450 / '2250'
     Mage : 80 / 104 / 136 / 176 / 240 / '1200'
     Archer : 110 / 143 / 187 / 242 / 330 / '1650'
     */
-    public HealthBar hpBar;
 
     [Header("Attack Common")]
-    public float attackDamage = 10;
+    public float attackDamage;
+    public float initAttackDamage;
     /*
     Warrior : 9 / 11 / 14 / 17 / 23 / '69'
     Mage : 33 / 40 / 50 / 63 / 83 / '249'
@@ -44,7 +47,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
     private float nextAttackTime;
 
     // IDamageable
-    public bool IsAlive => isLive;
+    public bool IsLive => isLive;
 
     // 캐시
     private Rigidbody2D rigid;
@@ -55,12 +58,26 @@ public class CombatUnit : MonoBehaviour, IDamageable
     // 타겟 태그(상대편)
     private string TargetTag => (side == UnitSide.Hero) ? "Enemy" : "Hero";
 
+    // IHealthSubject
+    public float CurrentHP => currentHP;
+
+    public float MaxHP => maxHP;
+
+    public event Action<float, float> OnHealthChanged;
+
+    // UpgradeController
+    private UpgradeController upgradeController;
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
+
+        upgradeController = GameController.Instance.upgradeController;
+
+        initAttackDamage = attackDamage;
     }
 
     private void OnEnable()
@@ -79,13 +96,10 @@ public class CombatUnit : MonoBehaviour, IDamageable
 
         currentHP = maxHP;
 
-        // 한 프레임 뒤에 HPBar 세팅 (HealthBar 초기화 보장)
-        Invoke(nameof(InitHPBar), 0f);
-    }
+        upgradeController.OnUpgradeChanged += UpdateUpgradeChanged;
+        UpdateUpgradeChanged();
 
-    private void InitHPBar()
-    {
-        hpBar?.SetHealth(currentHP, maxHP);
+        UpdateHealthChanged();
     }
 
     private void FixedUpdate()
@@ -153,7 +167,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
     {
         if (t == null) return false;
         IDamageable dmg = t.GetComponent<IDamageable>();
-        return (dmg != null && dmg.IsAlive);
+        return (dmg != null && dmg.IsLive);
     }
 
     private void EnterCombat(Transform target)
@@ -179,7 +193,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
 
         currentHP -= damage;
 
-        hpBar?.SetHealth(currentHP, maxHP);
+        UpdateHealthChanged();
 
         if (currentHP <= 0f)
         {
@@ -199,7 +213,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
             case UnitClass.Warrior:
                 {
                     IDamageable dmg = currentTarget.GetComponent<IDamageable>();
-                    if (dmg != null && dmg.IsAlive) dmg.TakeDamage(attackDamage);
+                    if (dmg != null && dmg.IsLive) dmg.TakeDamage(attackDamage);
                     break;
                 }
             case UnitClass.Archer:
@@ -237,7 +251,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
         isLive = false;
         rigid.simulated = false;
         coll.enabled = false;
-        anim?.SetBool("4_Death", true);
+        anim.SetBool("4_Death", true);
 
         if (side == UnitSide.Enemy)
         {
@@ -249,12 +263,42 @@ public class CombatUnit : MonoBehaviour, IDamageable
             GameController.Instance.gold += 500;
             GameController.Instance.coin += 10;
         }
+
+        upgradeController.OnUpgradeChanged -= UpdateUpgradeChanged;
+
+        UpdateHealthChanged();
+    }
+
+    private void UpdateHealthChanged()
+    {
+        OnHealthChanged?.Invoke(currentHP, maxHP);
+    }
+
+    private void UpdateUpgradeChanged()
+    {
+        if (side == UnitSide.Hero)
+        {
+            switch (unitRank)
+            {
+                case UnitRank.Normal:
+                case UnitRank.Rare:
+                case UnitRank.Epic:
+                    attackDamage = initAttackDamage * upgradeController.upgrade0;
+                    break;
+                case UnitRank.Legendary:
+                    attackDamage = initAttackDamage * upgradeController.upgrade1;
+                    break;
+                case UnitRank.Mythic:
+                    attackDamage = initAttackDamage * upgradeController.upgrade2;
+                    break;
+            }
+        }
     }
 
     // 애니 클립 끝 이벤트
     private void Dead()
     {
-        anim?.Rebind(); // 오브젝트 풀을 이용하면 발생하는 스펌 애니메이션 문제 제거
+        anim.Rebind(); // 오브젝트 풀을 이용하면 발생하는 스펌 애니메이션 문제 제거
         transform.parent.gameObject.SetActive(false);
     }
 }

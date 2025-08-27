@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public enum TowerType { Hero, Enemy }
 
-public class Tower : MonoBehaviour, IDamageable
+public class Tower : MonoBehaviour, IDamageable, IHealthSubject
 {
     [Header("Tower Type")]
     public TowerType towerType;
@@ -10,17 +11,25 @@ public class Tower : MonoBehaviour, IDamageable
     [Header("Health")]
     public float currentHP = 1000f;
     public float maxHP = 1000f;
-    public HealthBar hpBar;
 
     private bool isLive;
 
     // IDamageable
-    public bool IsAlive => isLive;
+    public bool IsLive => isLive;
 
-    private void Start()
+    // IHealthSubject
+    public float CurrentHP => currentHP;
+
+    public float MaxHP => maxHP;
+
+    public event Action<float, float> OnHealthChanged;
+
+    private void OnEnable()
     {
         isLive = true;
         currentHP = maxHP;
+
+        UpdateHealthChanged();
     }
 
     public void TakeDamage(float damage)
@@ -29,10 +38,8 @@ public class Tower : MonoBehaviour, IDamageable
 
         currentHP -= damage;
 
-        if (hpBar != null)
-        {
-            hpBar.SetHealth(currentHP, maxHP);
-        }
+        UpdateHealthChanged();
+
         if (currentHP <= 0f)
         {
             currentHP = 0f;
@@ -52,5 +59,12 @@ public class Tower : MonoBehaviour, IDamageable
         {
             GameController.Instance.GameVictory();
         }
+
+        UpdateHealthChanged();
+    }
+
+    private void UpdateHealthChanged()
+    {
+        OnHealthChanged?.Invoke(currentHP, maxHP);
     }
 }

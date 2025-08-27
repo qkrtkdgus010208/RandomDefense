@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
         if (!other.CompareTag(targetTag)) return;
 
         IDamageable dmg = other.GetComponentInParent<IDamageable>();
-        if (dmg != null && dmg.IsAlive)
+        if (dmg != null && dmg.IsLive)
         {
             dmg.TakeDamage(damage);
             gameObject.SetActive(false);

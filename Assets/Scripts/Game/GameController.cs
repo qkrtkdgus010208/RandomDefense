@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-1000)]
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
@@ -29,8 +30,7 @@ public class GameController : MonoBehaviour
     public Result gameResult;
     public GameObject overlayBackground;
     public GameObject buttonGroup;
-    public GameObject myCastle;
-    public GameObject yourCastle;
+    public UpgradeController upgradeController;
 
     private void Awake()
     {

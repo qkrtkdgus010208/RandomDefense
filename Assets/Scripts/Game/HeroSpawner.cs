@@ -21,8 +21,12 @@ public class HeroSpawner : MonoBehaviour
             needGold += 5;
             controller.requireGold.text = needGold.ToString();
         }
+        else
+        {
+            return;
+        }
 
-        int rand = Random.Range(1, 101); // 1 ~ 100
+            int rand = Random.Range(1, 101); // 1 ~ 100
         int id;
         switch (rand)
         {
