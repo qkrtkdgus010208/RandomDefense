@@ -23,7 +23,7 @@ public class InitScenario : MonoBehaviour
 
     private void OnAfterProgress()
     {
-        GameManager_Effect1.Instance.TryAutoLogin();
+        GameManager.Instance.TryAutoLogin();
     }
 
     public void OnClickLobby()

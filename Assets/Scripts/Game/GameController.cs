@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     [Header("# Game Info")]
     public int gameId; // 난이도(Easy:0, Normal:1, Hard:2, PvP:3)
     public int gold;
+    public int coin;
     public TextMeshProUGUI requireGold;
     public int kill;
 
@@ -58,6 +59,7 @@ public class GameController : MonoBehaviour
     public void GameStart()
     {
         gold = 20000;
+        coin = 10;
         requireGold.text = "50";
         kill = 0;
 

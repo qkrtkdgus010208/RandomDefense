@@ -18,7 +18,7 @@ public class HeroSpawner : MonoBehaviour
         {
             controller.gold -= needGold;
 
-            needGold += 20;
+            needGold += 5;
             controller.requireGold.text = needGold.ToString();
         }
 

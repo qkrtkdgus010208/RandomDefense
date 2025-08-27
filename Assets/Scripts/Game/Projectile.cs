@@ -5,7 +5,7 @@ public class Projectile : MonoBehaviour
 {
     public float speed;
 
-    private int damage;
+    private float damage;
     private string targetTag;
 
     private Rigidbody2D rigid;
@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
-    public void Launch(int damage, string targetTag, Vector3 dir)
+    public void Launch(float damage, string targetTag, Vector3 dir)
     {
         this.damage = damage;
         this.targetTag = targetTag;

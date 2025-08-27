@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    public enum InfoType { Gold, Kill, Time, MyHP, YourHP }
+    public enum InfoType { Gold, Coin, Kill, Time }
     public InfoType type;
 
     TextMeshProUGUI myText;
@@ -22,6 +22,10 @@ public class HUD : MonoBehaviour
         {
             case InfoType.Gold:
                 myText.text = $"{GameController.Instance.gold:F0}";
+                break;
+
+            case InfoType.Coin:
+                myText.text = $"{GameController.Instance.coin:F0}";
                 break;
 
             case InfoType.Kill:

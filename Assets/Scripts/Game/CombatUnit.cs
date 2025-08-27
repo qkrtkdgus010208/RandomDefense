@@ -2,14 +2,14 @@
 
 public enum UnitSide { Hero, Enemy }            // 어느 편인지
 public enum UnitClass { Warrior, Mage, Archer } // 전사 / 마법사 / 궁수
-public enum UnitRank { Unit, Boss }             // 기본 유닛 / 보스
+public enum UnitRank { Normal, Rare, Epic, Legendary, Mythic, Boss }             // 기본 유닛 / 보스
 
 public class CombatUnit : MonoBehaviour, IDamageable
 {
     [Header("Identity")]
     public UnitSide side = UnitSide.Enemy;
     public UnitClass unitClass = UnitClass.Warrior;
-    public UnitRank unitRank = UnitRank.Unit;
+    public UnitRank unitRank = UnitRank.Normal;
 
     [Header("Movement")]
     public float speed = 5f; // 전사 5, 법사 3, 궁수 7, 신화 +2, 보스 -2  
@@ -25,7 +25,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
     public HealthBar hpBar;
 
     [Header("Attack Common")]
-    public int attackDamage = 10;
+    public float attackDamage = 10;
     /*
     Warrior : 9 / 11 / 14 / 17 / 23 / '69'
     Mage : 33 / 40 / 50 / 63 / 83 / '249'
@@ -207,7 +207,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
                     if (projectilePrefab == null || firePoint == null) return;
 
                     Vector3 targetPos = currentTarget.position;
-                    targetPos.y += 0.7f; // 타겟 위치를 몸통 중앙으로 조정
+                    targetPos.y += 1f; // 타겟 위치를 몸통 중앙으로 조정
                     Vector3 dir = (targetPos - firePoint.position).normalized;
 
                     Transform projectile = GameController.Instance.projectilePool.Get(0).transform;
@@ -221,7 +221,7 @@ public class CombatUnit : MonoBehaviour, IDamageable
                     if (projectilePrefab == null || firePoint == null) return;
 
                     Vector3 targetPos = currentTarget.position;
-                    targetPos.y += 0.7f; // 타겟 위치를 몸통 중앙으로 조정
+                    targetPos.y += 1f; // 타겟 위치를 몸통 중앙으로 조정
                     Vector3 dir = (targetPos - firePoint.position).normalized;
 
                     Transform projectile = GameController.Instance.projectilePool.Get(1).transform;
@@ -235,19 +235,26 @@ public class CombatUnit : MonoBehaviour, IDamageable
     private void Die()
     {
         isLive = false;
-        coll.enabled = false;
         rigid.simulated = false;
+        coll.enabled = false;
         anim?.SetBool("4_Death", true);
 
         if (side == UnitSide.Enemy)
+        {
             GameController.Instance.gold += 50;
+            GameController.Instance.coin += 1;
+        }
         else if (unitRank == UnitRank.Boss)
+        {
             GameController.Instance.gold += 500;
+            GameController.Instance.coin += 10;
+        }
     }
 
     // 애니 클립 끝 이벤트
     private void Dead()
     {
+        anim?.Rebind(); // 오브젝트 풀을 이용하면 발생하는 스펌 애니메이션 문제 제거
         transform.parent.gameObject.SetActive(false);
     }
 }
