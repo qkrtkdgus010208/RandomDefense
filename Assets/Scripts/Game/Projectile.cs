@@ -32,6 +32,12 @@ public class Projectile : MonoBehaviour
         {
             dmg.TakeDamage(damage);
             gameObject.SetActive(false);
+
+            Vector3 popupPos = other.transform.position;
+            popupPos.y += 3f;
+            GameObject damagePopup = GameController.Instance.damagePopupPool.Get(0);
+            damagePopup.GetComponent<DamagePopup>().Init(damage);
+            damagePopup.transform.position = popupPos;
         }
     }
 

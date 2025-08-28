@@ -213,7 +213,16 @@ public class CombatUnit : MonoBehaviour, IDamageable, IHealthSubject
             case UnitClass.Warrior:
                 {
                     IDamageable dmg = currentTarget.GetComponent<IDamageable>();
-                    if (dmg != null && dmg.IsLive) dmg.TakeDamage(attackDamage);
+                    if (dmg != null && dmg.IsLive)
+                    {
+                        dmg.TakeDamage(attackDamage);
+
+                        Vector3 popupPos = currentTarget.transform.position;
+                        popupPos.y += 3f;
+                        GameObject damagePopup = GameController.Instance.damagePopupPool.Get(0);
+                        damagePopup.GetComponent<DamagePopup>().Init(attackDamage);
+                        damagePopup.transform.position = popupPos;
+                    }
                     break;
                 }
             case UnitClass.Archer:

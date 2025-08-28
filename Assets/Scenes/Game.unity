@@ -2368,6 +2368,7 @@ MonoBehaviour:
   heroPool: {fileID: 753713023}
   enemyPool: {fileID: 1295161843}
   projectilePool: {fileID: 1299499367}
+  damagePopupPool: {fileID: 1853989553}
   gameResult: {fileID: 484883712}
   overlayBackground: {fileID: 267240735}
   buttonGroup: {fileID: 235412367}
@@ -7022,6 +7023,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797114473}
   m_CullTransparentMesh: 0
+--- !u!1 &1853989552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853989554}
+  - component: {fileID: 1853989553}
+  m_Layer: 0
+  m_Name: DamagePopupPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1853989553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853989552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154a5522230af0246966f5a323f06fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 8103489920067489011, guid: f5cea8ae60fe48c47bc10e202a446109, type: 3}
+--- !u!4 &1853989554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853989552}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1854980226
 GameObject:
   m_ObjectHideFlags: 0
@@ -10503,6 +10550,7 @@ SceneRoots:
   - {fileID: 1295161844}
   - {fileID: 392590637}
   - {fileID: 272834149}
+  - {fileID: 1299499368}
+  - {fileID: 1853989554}
   - {fileID: 1301606810}
   - {fileID: 1543372525}
-  - {fileID: 1299499368}

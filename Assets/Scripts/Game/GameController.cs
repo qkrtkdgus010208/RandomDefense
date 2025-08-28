@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
     public PoolManager heroPool;
     public PoolManager enemyPool;
     public PoolManager projectilePool;
+    public PoolManager damagePopupPool;
     public Result gameResult;
     public GameObject overlayBackground;
     public GameObject buttonGroup;
