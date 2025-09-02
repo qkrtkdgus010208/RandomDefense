@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 [DefaultExecutionOrder(-1000)]
@@ -32,6 +33,9 @@ public class GameController : MonoBehaviour
     public GameObject overlayBackground;
     public GameObject buttonGroup;
     public UpgradeController upgradeController;
+
+    [SerializeField]
+    private RankRegister rank;
 
     private void Awake()
     {
@@ -74,7 +78,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator GameOverRoutine()
     {
-        isPlay = false;
+        isPlay = false;  
 
         yield return new WaitForSeconds(0.5f);
 
@@ -93,6 +97,10 @@ public class GameController : MonoBehaviour
     IEnumerator GameVictoryRoutine()
     {
         isPlay = false;
+
+        // 현재 잔여 시간을 바탕으로 랭킹 데이터 갱신
+        float remainTime = GameController.Instance.maxGameTime - GameController.Instance.gameTime;
+        rank.Process((int)remainTime);
 
         yield return new WaitForSeconds(0.5f);
 
