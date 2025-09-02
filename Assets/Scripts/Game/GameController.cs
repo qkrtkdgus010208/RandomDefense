@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour
     public void GameStart()
     {
         gold = 20000;
-        coin = 10;
+        coin = 10000;
         requireGold.text = "50";
         kill = 0;
 

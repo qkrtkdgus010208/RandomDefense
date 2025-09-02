@@ -26,7 +26,7 @@ public class HeroSpawner : MonoBehaviour
             return;
         }
 
-            int rand = Random.Range(1, 101); // 1 ~ 100
+        int rand = Random.Range(1, 101); // 1 ~ 100
         int id;
         switch (rand)
         {
@@ -61,6 +61,12 @@ public class HeroSpawner : MonoBehaviour
     private void Spawn(int id)
     {
         GameObject hero = GameController.Instance.heroPool.Get(id);
+        hero.transform.GetChild(0).position = spawnPoint.position;
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject hero = GameController.Instance.heroPool.Get(5);
         hero.transform.GetChild(0).position = spawnPoint.position;
     }
 }

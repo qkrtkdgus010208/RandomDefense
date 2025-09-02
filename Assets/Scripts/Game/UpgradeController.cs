@@ -42,69 +42,58 @@ public class UpgradeController : MonoBehaviour
         UpdateUpgradeData();
     }
 
-    public void OnClickUpgrade0()
+    public void OnClickUpgrade(int id)
     {
-        int needGold = int.Parse(requireGold0.text);
+        int needGold = 0;
+        switch (id)
+        {
+            case 0:
+                needGold = int.Parse(requireGold0.text);
+                break;
+            case 1:
+                needGold = int.Parse(requireGold1.text);
+                break;
+            case 2:
+                needGold = int.Parse(requireGold2.text);
+                break;
+        }
+
         if (controller.gold >= needGold)
         {
             controller.gold -= needGold;
 
-            needGold += 30;
-            requireGold0.text = needGold.ToString();
+            switch (id)
+            {
+                case 0:
+                    needGold += 30;
+                    requireGold0.text = needGold.ToString();
+                    level0++;
+                    textLevel0.text = $"Lv.{level0 + 1}";
+                    upgrade0 += 0.2f;
+                    break;
 
-            level0++;
-            textLevel0.text = $"Lv.{level0 + 1}";
+                case 1:
+                    needGold += 50;
+                    requireGold1.text = needGold.ToString();
+                    level1++;
+                    textLevel1.text = $"Lv.{level1 + 1}";
+                    upgrade1 += 0.2f;
+                    break;
+
+                case 2:
+                    needGold += 100;
+                    requireGold2.text = needGold.ToString();
+                    level2++;
+                    textLevel2.text = $"Lv.{level2 + 1}";
+                    upgrade2 += 0.2f;
+                    break;
+            }
         }
         else
         {
             return;
         }
 
-        upgrade0 += 0.2f;
-        UpdateUpgradeData();
-    }
-
-    public void OnClickUpgrade1()
-    {
-        int needGold = int.Parse(requireGold1.text);
-        if (controller.gold >= needGold)
-        {
-            controller.gold -= needGold;
-
-            needGold += 50;
-            requireGold1.text = needGold.ToString();
-
-            level1++;
-            textLevel1.text = $"Lv.{level1 + 1}";
-        }
-        else
-        {
-            return;
-        }
-
-        upgrade1 += 0.2f;
-        UpdateUpgradeData();
-    }
-
-    public void OnClickUpgrade2()
-    {
-        int needGold = int.Parse(requireGold2.text);
-        if (controller.gold >= needGold)
-        {
-            controller.gold -= needGold;
-
-            needGold += 100;
-            requireGold2.text = needGold.ToString();
-
-            level2++;
-            textLevel2.text = $"Lv.{level2 + 1}";
-        }
-        else
-        {
-            return;
-        }
-
-        upgrade2 += 0.2f;
         UpdateUpgradeData();
     }
 
