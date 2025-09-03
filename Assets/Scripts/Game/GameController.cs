@@ -69,6 +69,8 @@ public class GameController : MonoBehaviour
         kill = 0;
 
         Resume();
+
+        AudioManager.Instance.PlayBgm(true);
     }
 
     public void GameOver()
@@ -87,6 +89,9 @@ public class GameController : MonoBehaviour
         gameResult.gameObject.SetActive(true);
         gameResult.Lose();
         Stop();
+
+        AudioManager.Instance.PlayBgm(false);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
     }
 
     public void GameVictory()
@@ -109,6 +114,9 @@ public class GameController : MonoBehaviour
         gameResult.gameObject.SetActive(true);
         gameResult.Win();
         Stop();
+
+        AudioManager.Instance.PlayBgm(false);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
     }
 
     public void OnClickLobby()
@@ -122,14 +130,15 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    public void Exit()
-    {
-        Utils.LoadScene("Lobby");
-    }
-
     public void Resume()
     {
         isPlay = true;
         Time.timeScale = 1;
+    }
+
+    public void Exit()
+    {
+        AudioManager.Instance.PlayBgm(false);
+        Utils.LoadScene("Lobby");
     }
 }

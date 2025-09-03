@@ -20,6 +20,8 @@ public class HeroSpawner : MonoBehaviour
 
             needGold += 5;
             controller.requireGold.text = needGold.ToString();
+
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Select);
         }
         else
         {
