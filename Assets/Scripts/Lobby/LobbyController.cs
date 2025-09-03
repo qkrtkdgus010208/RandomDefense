@@ -34,7 +34,15 @@ public class LobbyController : MonoBehaviour
             Debug.Log("로그아웃 실패");
         }
 
+        OnClickQuit();
+    }
+
+    public void OnClickQuit()
+    {
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 }
