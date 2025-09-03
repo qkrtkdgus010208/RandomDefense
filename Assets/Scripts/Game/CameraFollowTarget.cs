@@ -17,6 +17,8 @@ public class CameraFollowTarget : MonoBehaviour
 
     private void HandleKeyboard()
     {
+        if (!GameController.Instance.isPlay) return;
+
         float horizontal = Input.GetAxisRaw("Horizontal"); // A,D 또는 ←, →
         if (horizontal != 0)
         {
@@ -29,6 +31,8 @@ public class CameraFollowTarget : MonoBehaviour
 
     private void HandleMouseDrag()
     {
+        if (!GameController.Instance.isPlay) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             dragOrigin = Input.mousePosition;

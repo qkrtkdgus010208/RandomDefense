@@ -30,26 +30,46 @@ public class LuckyController : MonoBehaviour
         {
             case 0:
                 needCoin = int.Parse(requireCoin0.text);
-                if (Random.Range(1, 101) <= 10)
-                    heroSpawner.SpawnBoss();
                 break;
-
             case 1:
                 needCoin = int.Parse(requireCoin1.text);
-                if (Random.Range(1, 101) <= 30)
-                    heroSpawner.SpawnBoss();
                 break;
-
             case 2:
                 needCoin = int.Parse(requireCoin2.text);
-                if (Random.Range(1, 101) <= 60)
-                    heroSpawner.SpawnBoss();
                 break;
         }
 
         if (controller.coin >= needCoin)
         {
             controller.coin -= needCoin;
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Select);
+
+            switch (id)
+            {
+                case 0:
+                    if (Random.Range(1, 101) <= 10)
+                    {
+                        heroSpawner.SpawnBoss();
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.LevelUp);
+                    }
+                    break;
+
+                case 1:
+                    if (Random.Range(1, 101) <= 30)
+                    {
+                        heroSpawner.SpawnBoss();
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.LevelUp);
+                    }
+                    break;
+
+                case 2:
+                    if (Random.Range(1, 101) <= 60)
+                    {
+                        heroSpawner.SpawnBoss();
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.LevelUp);
+                    }
+                    break;
+            }
         }
         else
         {

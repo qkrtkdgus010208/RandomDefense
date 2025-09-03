@@ -61,6 +61,7 @@ public class UpgradeController : MonoBehaviour
         if (controller.gold >= needGold)
         {
             controller.gold -= needGold;
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Select);
 
             switch (id)
             {
