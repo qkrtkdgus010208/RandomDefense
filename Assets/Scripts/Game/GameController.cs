@@ -1,11 +1,6 @@
-﻿using BackEnd;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
 [DefaultExecutionOrder(-1000)]
 public class GameController : MonoBehaviour

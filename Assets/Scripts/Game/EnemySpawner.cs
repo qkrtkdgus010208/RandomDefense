@@ -3,8 +3,8 @@
 public class EnemySpawner : MonoBehaviour
 {
     public Transform spawnPoint;
-    public float spawnTime;
-    public float bossSpawnTime;
+    public float spawnTime = 3;
+    public float bossSpawnTime = 30;
 
     float timer;
     float timerBoss;
@@ -71,5 +71,7 @@ public class EnemySpawner : MonoBehaviour
     {
         GameObject enemy = GameController.Instance.enemyPool.Get(id);
         enemy.transform.GetChild(0).position = spawnPoint.position;
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Warning);
     }
 }
